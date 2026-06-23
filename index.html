@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Exámenes RCF — Maquinista</title>
   <script>
     (function () {
@@ -67,7 +67,7 @@
 
       <p class="nota" id="poolInfo"></p>
 
-      <p>
+      <p class="config-actions">
         <button type="button" id="presetOfficial" class="btn">Examen oficial (60 preg., 5 libros)</button>
         <button type="button" id="exportPdfBtn" class="btn">Generar PDF para imprimir</button>
         <button type="button" id="startBtn" class="btn btn--principal">Comenzar examen</button>
@@ -90,7 +90,7 @@
           <p class="nota">Preguntas que has fallado en exámenes anteriores. Se guardan automáticamente.</p>
           <p id="failedEmpty" class="nota" hidden>No tienes preguntas falladas guardadas.</p>
           <ul id="failedList" class="failed-list"></ul>
-          <p>
+          <p class="config-actions config-actions--compact">
             <button type="button" id="startFailedBtn" class="btn btn--principal" disabled>Examen solo con falladas</button>
             <button type="button" id="clearFailedBtn" class="btn">Vaciar historial</button>
           </p>
@@ -190,7 +190,7 @@
         <div class="doc-header__title">Resultado del examen</div>
       </header>
       <div id="resultsHero"></div>
-      <p class="centro">
+      <p class="centro config-actions config-actions--stack">
         <button type="button" id="reviewWrongBtn" class="btn">Ver fallos</button>
         <button type="button" id="reviewAllBtn" class="btn">Ver todas</button>
         <button type="button" id="retryFailedBtn" class="btn">Repasar falladas</button>

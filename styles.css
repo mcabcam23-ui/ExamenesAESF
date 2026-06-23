@@ -1,29 +1,36 @@
 * { box-sizing: border-box; }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   padding: 1.5rem 1rem 2rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
   font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: 11.5pt;
+  font-size: clamp(10.5pt, 2.8vw, 11.5pt);
   line-height: 1.5;
   color: #111;
   background: #b8b8b8;
+  overflow-x: hidden;
 }
-
 .view[hidden] { display: none !important; }
 
-/* Hoja A4 */
+/* Hoja A4 — ancho fluido en pantalla */
 .hoja {
-  max-width: 210mm;
+  width: 100%;
+  max-width: min(210mm, 100%);
   min-height: 120mm;
   margin: 0 auto 1rem;
-  padding: 16mm 18mm 14mm;
+  padding: clamp(0.85rem, 4vw, 16mm) clamp(0.85rem, 4.5vw, 18mm) clamp(0.75rem, 3.5vw, 14mm);
   background: #fff;
   border: 1px solid #888;
   box-shadow: 0 2px 8px rgba(0,0,0,.18);
   position: relative;
 }
-
 .hoja::before {
   content: "";
   position: absolute;
@@ -140,15 +147,15 @@ hr {
 
 .btn {
   font-family: inherit;
-  font-size: 11pt;
-  padding: 5px 14px;
+  font-size: inherit;
+  padding: 0.45rem 0.9rem;
   margin: 2px;
   cursor: pointer;
   background: #f5f5f5;
   border: 1px solid #555;
   color: #111;
+  touch-action: manipulation;
 }
-
 .btn:hover { background: #e8e8e8; }
 
 .btn--principal {
@@ -195,7 +202,7 @@ hr {
 .figura img {
   display: block;
   max-width: 100%;
-  max-height: 220px;
+  max-height: min(220px, 45vh);
   width: auto;
   height: auto;
   margin: 0 auto;
@@ -203,7 +210,6 @@ hr {
   padding: 6px;
   background: #fafafa;
 }
-
 /* Opciones */
 .opciones {
   margin-top: 0.5rem;
@@ -214,11 +220,12 @@ hr {
   align-items: flex-start;
   gap: 0.5rem;
   margin: 0.55rem 0;
-  padding: 0.35rem 0.25rem;
+  padding: 0.5rem 0.35rem;
   text-align: justify;
   cursor: pointer;
+  border-radius: 4px;
+  min-height: 2.75rem;
 }
-
 .opcion input {
   flex-shrink: 0;
   margin-top: 4px;
@@ -275,10 +282,10 @@ hr {
 .resultado-linea--mal { color: #c62828; font-weight: bold; }
 
 .review-item {
-  max-width: 210mm;
+  width: 100%;
+  max-width: min(210mm, 100%);
   margin: 0 auto 1rem;
-  padding: 16mm 18mm;
-  background: #fff;
+  padding: clamp(0.85rem, 4vw, 16mm) clamp(0.85rem, 4.5vw, 18mm);  background: #fff;
   border: 1px solid #888;
   box-shadow: 0 1px 4px rgba(0,0,0,.12);
 }
@@ -317,13 +324,14 @@ body.body--exam {
 }
 
 .exam-layout {
-  max-width: 210mm;
+  width: 100%;
+  max-width: min(210mm, 100%);
   margin: 0 auto;
-  padding-bottom: 72px;
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
 }
-
 .barra--top {
-  max-width: 210mm;
+  width: 100%;
+  max-width: min(210mm, 100%);
   margin: 0 auto 0.75rem;
   padding: 0.5rem 0.75rem;
   background: #fff;
@@ -332,7 +340,6 @@ body.body--exam {
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
 }
-
 .barra__titulo {
   font-size: 9.5pt;
   font-weight: bold;
@@ -426,13 +433,13 @@ body.body--exam {
 
 /* Mapa de preguntas desplegable */
 .mapa-desplegable {
-  max-width: 210mm;
+  width: 100%;
+  max-width: min(210mm, 100%);
   margin: 0 auto 0.75rem;
   background: #fff;
   border: 1px solid #888;
   padding: 0.5rem 0.75rem;
 }
-
 .mapa-desplegable summary {
   cursor: pointer;
   font-weight: bold;
@@ -518,31 +525,18 @@ body.body--exam {
   background: #f0f0f0;
   border-top: 2px solid #555;
   box-shadow: 0 -2px 10px rgba(0,0,0,.15);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .exam-nav-fixed__inner {
-  max-width: 210mm;
+  width: 100%;
+  max-width: min(210mm, 100%);
   margin: 0 auto;
-  padding: 0.6rem 1rem;
+  padding: 0.6rem max(1rem, env(safe-area-inset-left)) calc(0.6rem + env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-right));
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   align-items: center;
-  gap: 0.75rem;
-}
-
-@media (max-width: 480px) {
-  .exam-nav-fixed__inner {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-  .exam-nav-fixed__progress {
-    grid-column: 1 / -1;
-    order: -1;
-  }
-  .exam-nav-fixed .btn--principal {
-    grid-column: 1 / -1;
-    margin-left: 0;
-  }
+  gap: 0.5rem 0.75rem;
 }
 
 .exam-nav-fixed__progress {
@@ -677,10 +671,11 @@ body.body--exam {
 }
 
 .archive-questions {
-  max-width: 210mm;
+  width: 100%;
+  max-width: min(210mm, 100%);
   margin: 0 auto 2rem;
+  padding: 0 max(0.35rem, env(safe-area-inset-right)) 0 max(0.35rem, env(safe-area-inset-left));
 }
-
 .archive-q {
   background: #fff;
   border: 1px solid #888;
@@ -707,6 +702,10 @@ body.body--exam {
   margin: 1rem 0;
 }
 
+.scan-actions .btn {
+  flex: 1 1 calc(50% - 0.5rem);
+  min-width: min(100%, 9rem);
+}
 .scan-preview {
   margin: 1rem auto;
   max-width: 100%;
@@ -884,4 +883,235 @@ body.body--exam {
 .archive-loading {
   text-align: center;
   padding: 2rem;
+}
+
+/* Botones de configuración */
+.config-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.config-actions .btn {
+  flex: 1 1 auto;
+  min-width: min(100%, 10rem);
+}
+
+.config-actions--compact .btn {
+  flex: 1 1 calc(50% - 0.5rem);
+}
+
+/* ——— Responsive: tablet y móvil ——— */
+@media (max-width: 768px) {
+  body {
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .hoja {
+    border-left: none;
+    border-right: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,.12);
+  }
+
+  .hoja::before {
+    inset: 2mm;
+  }
+
+  .doc-header__title {
+    font-size: clamp(11pt, 4.5vw, 13pt);
+  }
+
+  .form-table,
+  .form-table tbody,
+  .form-table tr,
+  .form-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .form-table tr {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .form-table tr:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .form-table td:first-child {
+    width: auto;
+    white-space: normal;
+    padding-bottom: 0.25rem;
+    color: #333;
+  }
+
+  .form-table td:last-child {
+    padding-left: 0;
+  }
+
+  #bookGrid label {
+    display: block;
+    padding: 0.35rem 0;
+    min-height: 2.25rem;
+  }
+
+  .config-actions .btn,
+  .config-actions--compact .btn,
+  .config-actions--stack .btn {
+    flex: 1 1 100%;
+    width: 100%;
+    min-height: 2.75rem;
+  }
+
+  .scan-actions .btn {
+    flex: 1 1 100%;
+    width: 100%;
+    min-height: 2.75rem;
+  }
+
+  .btn {
+    min-height: 2.75rem;
+  }
+
+  .btn--sm {
+    min-height: 2.25rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .centro .btn {
+    margin: 0.25rem 0;
+  }
+
+  .mapa-btn {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    font-size: 10pt;
+  }
+
+  .pregunta-mapa {
+    max-height: min(160px, 28vh);
+  }
+
+  .review-item,
+  .archive-q {
+    padding: 1rem 0.85rem;
+    border-left: none;
+    border-right: none;
+  }
+
+  .archived-item__actions {
+    width: 100%;
+  }
+
+  .archived-item__actions .btn {
+    flex: 1 1 calc(50% - 0.35rem);
+    min-height: 2.5rem;
+  }
+
+  .scan-opt-btn {
+    flex: 1 1 calc(25% - 0.5rem);
+    min-height: 3rem;
+    min-width: 0;
+  }
+
+  .scan-opt-btn--empty {
+    flex: 1 1 100%;
+  }
+
+  .scan-doubt-card {
+    padding: 0.85rem;
+  }
+
+  .resultado-hero__estado {
+    font-size: clamp(14pt, 5vw, 18pt);
+  }
+
+  .marcador-live__num {
+    font-size: clamp(14pt, 4.5vw, 18pt);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-left: max(0.35rem, env(safe-area-inset-left));
+    padding-right: max(0.35rem, env(safe-area-inset-right));
+  }
+
+  .hoja {
+    padding: 0.85rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hoja::before {
+    display: none;
+  }
+
+  .barra--top {
+    padding: 0.45rem 0.5rem;
+  }
+
+  .exam-nav-fixed__inner {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.4rem;
+  }
+
+  .exam-nav-fixed__progress {
+    grid-column: 1 / -1;
+    order: -1;
+    font-size: 10pt;
+  }
+
+  .exam-nav-fixed .btn--principal {
+    grid-column: 1 / -1;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .exam-nav-fixed .btn {
+    min-height: 2.75rem;
+    width: 100%;
+  }
+
+  .mapa-leyenda {
+    gap: 0.4rem 0.75rem;
+    font-size: 8.5pt;
+  }
+
+  .opcion {
+    padding: 0.6rem 0.4rem;
+  }
+
+  .opcion input {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.15rem;
+  }
+
+  .failed-list__item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .failed-list__del {
+    align-self: flex-end;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+
+  .app-busy__box {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+@media (min-width: 769px) {
+  .config-actions .btn--principal {
+    flex: 1.2 1 auto;
+  }
 }
