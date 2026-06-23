@@ -103,7 +103,7 @@
     <div class="exam-layout">
       <div class="barra barra--top">
         <button type="button" id="exitExamBtn" class="btn btn--link">[ Salir ]</button>
-        <button type="button" id="exportPdfExamBtn" class="btn btn--sm">PDF / Imprimir</button>
+        <button type="button" id="exportPdfExamBtn" class="btn btn--sm btn--icon-mobile" title="PDF / Imprimir">PDF</button>
         <span id="examInfo" class="barra__titulo"></span>
         <div id="liveScore" class="marcador-live" hidden></div>
       </div>
@@ -124,10 +124,10 @@
 
     <nav class="exam-nav-fixed" aria-label="Navegación del examen">
       <div class="exam-nav-fixed__inner">
-        <button type="button" id="prevBtn" class="btn" disabled>← Anterior</button>
+        <button type="button" id="prevBtn" class="btn btn--nav" disabled><span class="nav-mobile">←</span><span class="nav-desktop">← Anterior</span></button>
         <span id="examProgress" class="exam-nav-fixed__progress"></span>
-        <button type="button" id="nextBtn" class="btn">Siguiente →</button>
-        <button type="button" id="finishBtn" class="btn btn--principal">Finalizar examen</button>
+        <button type="button" id="nextBtn" class="btn btn--nav"><span class="nav-mobile">→</span><span class="nav-desktop">Siguiente →</span></button>
+        <button type="button" id="finishBtn" class="btn btn--principal btn--nav-finish"><span class="nav-mobile">Fin</span><span class="nav-desktop">Finalizar examen</span></button>
       </div>
     </nav>
   </div>

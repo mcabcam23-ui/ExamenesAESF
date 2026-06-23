@@ -417,17 +417,8 @@ body.body--exam {
 }
 
 @media (max-width: 560px) {
-  .barra--top {
-    justify-content: center;
-  }
-  .barra__titulo {
-    flex: 1 1 100%;
-    order: -1;
-  }
-  .marcador-live {
-    margin-left: 0;
-    justify-content: center;
-    flex: 1 1 100%;
+  body.body--exam .barra--top {
+    justify-content: flex-start;
   }
 }
 
@@ -548,6 +539,13 @@ body.body--exam {
 
 .exam-nav-fixed .btn--principal {
   justify-self: end;
+}
+
+.nav-mobile { display: none; }
+
+@media (max-width: 768px) {
+  .nav-desktop { display: none; }
+  .nav-mobile { display: inline; }
 }
 
 /* Repaso falladas en config */
@@ -905,22 +903,212 @@ body.body--exam {
 /* ——— Responsive: tablet y móvil ——— */
 @media (max-width: 768px) {
   body {
-    padding-top: 0.5rem;
-    padding-bottom: 1rem;
+    padding: 0;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    font-size: 11pt;
+    line-height: 1.4;
   }
 
   .hoja {
-    border-left: none;
-    border-right: none;
-    box-shadow: 0 1px 4px rgba(0,0,0,.12);
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: auto;
   }
 
   .hoja::before {
-    inset: 2mm;
+    display: none;
+  }
+
+  .doc-header {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .doc-header__top {
+    font-size: 7pt;
   }
 
   .doc-header__title {
-    font-size: clamp(11pt, 4.5vw, 13pt);
+    font-size: 12pt;
+  }
+
+  .doc-header__meta {
+    font-size: 9pt;
+  }
+
+  /* —— Modo examen: pantalla completa, poco scroll —— */
+  body.body--exam {
+    background: #fff;
+  }
+
+  body.body--exam .exam-layout {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  body.body--exam .barra--top {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0.35rem 0.5rem;
+    padding-top: max(0.35rem, env(safe-area-inset-top));
+    border: none;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    gap: 0.25rem 0.4rem;
+    align-items: center;
+  }
+
+  body.body--exam .barra__titulo {
+    display: none;
+  }
+
+  body.body--exam #exportPdfExamBtn {
+    margin-left: auto;
+    min-height: 2rem;
+    padding: 0.2rem 0.45rem;
+    font-size: 9pt;
+  }
+
+  body.body--exam #exitExamBtn {
+    min-height: 2rem;
+    padding: 0.2rem 0.35rem;
+    font-size: 10pt;
+  }
+
+  body.body--exam .marcador-live {
+    flex: 1;
+    margin: 0;
+    justify-content: center;
+    gap: 0.3rem;
+  }
+
+  body.body--exam .marcador-live__chip {
+    flex-direction: row;
+    align-items: center;
+    min-width: 0;
+    padding: 0.15rem 0.4rem;
+    gap: 0.2rem;
+    border-width: 1px;
+    box-shadow: none;
+  }
+
+  body.body--exam .marcador-live__label {
+    font-size: 6.5pt;
+  }
+
+  body.body--exam .marcador-live__num {
+    font-size: 11pt;
+  }
+
+  body.body--exam .marcador-live__total {
+    display: none;
+  }
+
+  body.body--exam .mapa-desplegable {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0.35rem 0.5rem;
+  }
+
+  body.body--exam .mapa-desplegable summary {
+    font-size: 9.5pt;
+    padding: 0.15rem 0;
+  }
+
+  body.body--exam .mapa-leyenda {
+    gap: 0.35rem 0.6rem;
+    font-size: 8pt;
+    margin-bottom: 0.35rem;
+  }
+
+  body.body--exam .pregunta-mapa {
+    max-height: 22vh;
+  }
+
+  body.body--exam #questionPanel.hoja {
+    padding: 0.5rem 0.65rem 0.65rem;
+  }
+
+  body.body--exam #questionPanel .doc-header--exam,
+  body.body--exam #questionPanel .doc-footer--exam {
+    display: none;
+  }
+
+  body.body--exam .pregunta-num {
+    margin-bottom: 0.65rem;
+    font-size: 11pt;
+    line-height: 1.35;
+  }
+
+  body.body--exam .opcion {
+    margin: 0.35rem 0;
+    padding: 0.45rem 0.35rem;
+    min-height: 2.5rem;
+  }
+
+  body.body--exam .correccion {
+    margin-top: 0.65rem;
+    padding: 0.45rem 0.55rem;
+    font-size: 10pt;
+  }
+
+  body.body--exam .figura img {
+    max-height: min(180px, 32vh);
+    padding: 4px;
+  }
+
+  /* Barra inferior: una sola fila compacta */
+  body.body--exam .exam-nav-fixed__inner {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    max-width: none;
+    padding: 0.35rem 0.5rem;
+    padding-bottom: calc(0.35rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  body.body--exam .exam-nav-fixed__progress {
+    flex: 1;
+    min-width: 2.5rem;
+    font-size: 11pt;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  body.body--exam .btn--nav {
+    flex: 0 0 auto;
+    min-height: 2.5rem;
+    min-width: 2.75rem;
+    width: auto;
+    padding: 0.35rem 0.55rem;
+    font-size: 14pt;
+    line-height: 1;
+  }
+
+  body.body--exam .btn--nav-finish {
+    flex: 0 1 auto;
+    min-width: 0;
+    min-height: 2.5rem;
+    padding: 0.35rem 0.5rem;
+    font-size: 9.5pt;
+    white-space: nowrap;
   }
 
   .form-table,
@@ -932,8 +1120,8 @@ body.body--exam {
   }
 
   .form-table tr {
-    margin-bottom: 0.85rem;
-    padding-bottom: 0.85rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
     border-bottom: 1px solid #e0e0e0;
   }
 
@@ -946,7 +1134,7 @@ body.body--exam {
   .form-table td:first-child {
     width: auto;
     white-space: normal;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.2rem;
     color: #333;
   }
 
@@ -956,8 +1144,8 @@ body.body--exam {
 
   #bookGrid label {
     display: block;
-    padding: 0.35rem 0;
-    min-height: 2.25rem;
+    padding: 0.3rem 0;
+    min-height: 2rem;
   }
 
   .config-actions .btn,
@@ -965,41 +1153,37 @@ body.body--exam {
   .config-actions--stack .btn {
     flex: 1 1 100%;
     width: 100%;
-    min-height: 2.75rem;
+    min-height: 2.5rem;
   }
 
   .scan-actions .btn {
     flex: 1 1 100%;
     width: 100%;
-    min-height: 2.75rem;
+    min-height: 2.5rem;
   }
 
   .btn {
-    min-height: 2.75rem;
+    min-height: 2.5rem;
   }
 
   .btn--sm {
-    min-height: 2.25rem;
-    padding: 0.35rem 0.65rem;
+    min-height: 2.1rem;
+    padding: 0.3rem 0.55rem;
   }
 
   .centro .btn {
-    margin: 0.25rem 0;
+    margin: 0.2rem 0;
   }
 
   .mapa-btn {
-    min-width: 2.25rem;
-    height: 2.25rem;
-    font-size: 10pt;
-  }
-
-  .pregunta-mapa {
-    max-height: min(160px, 28vh);
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 9pt;
   }
 
   .review-item,
   .archive-q {
-    padding: 1rem 0.85rem;
+    padding: 0.75rem;
     border-left: none;
     border-right: none;
   }
@@ -1010,12 +1194,12 @@ body.body--exam {
 
   .archived-item__actions .btn {
     flex: 1 1 calc(50% - 0.35rem);
-    min-height: 2.5rem;
+    min-height: 2.35rem;
   }
 
   .scan-opt-btn {
     flex: 1 1 calc(25% - 0.5rem);
-    min-height: 3rem;
+    min-height: 2.75rem;
     min-width: 0;
   }
 
@@ -1024,73 +1208,28 @@ body.body--exam {
   }
 
   .scan-doubt-card {
-    padding: 0.85rem;
+    padding: 0.75rem;
   }
 
   .resultado-hero__estado {
-    font-size: clamp(14pt, 5vw, 18pt);
+    font-size: 16pt;
   }
 
-  .marcador-live__num {
-    font-size: clamp(14pt, 4.5vw, 18pt);
+  input[type="number"],
+  input[type="text"],
+  select {
+    font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  body {
-    padding-left: max(0.35rem, env(safe-area-inset-left));
-    padding-right: max(0.35rem, env(safe-area-inset-right));
+  body.body--exam .btn--nav-finish {
+    font-size: 9pt;
+    padding: 0.3rem 0.4rem;
   }
 
-  .hoja {
-    padding: 0.85rem 0.75rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .hoja::before {
-    display: none;
-  }
-
-  .barra--top {
-    padding: 0.45rem 0.5rem;
-  }
-
-  .exam-nav-fixed__inner {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 0.4rem;
-  }
-
-  .exam-nav-fixed__progress {
-    grid-column: 1 / -1;
-    order: -1;
-    font-size: 10pt;
-  }
-
-  .exam-nav-fixed .btn--principal {
-    grid-column: 1 / -1;
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .exam-nav-fixed .btn {
-    min-height: 2.75rem;
-    width: 100%;
-  }
-
-  .mapa-leyenda {
-    gap: 0.4rem 0.75rem;
-    font-size: 8.5pt;
-  }
-
-  .opcion {
-    padding: 0.6rem 0.4rem;
-  }
-
-  .opcion input {
-    width: 1.15rem;
-    height: 1.15rem;
-    margin-top: 0.15rem;
+  body.body--exam .marcador-live__chip {
+    padding: 0.1rem 0.3rem;
   }
 
   .failed-list__item {
@@ -1100,8 +1239,8 @@ body.body--exam {
 
   .failed-list__del {
     align-self: flex-end;
-    min-width: 2.5rem;
-    min-height: 2.5rem;
+    min-width: 2.35rem;
+    min-height: 2.35rem;
   }
 
   .app-busy__box {

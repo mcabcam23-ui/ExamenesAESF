@@ -306,12 +306,12 @@ function renderExam() {
   const cab = books.length === 1 ? `EXAMEN RCF: Libro ${books[0]}` : "EXAMEN RCF";
 
   $("#examInfo").textContent = `${cab} — ${isPractice ? "PRÁCTICA" : "EXAMEN"}`;
-  $("#examProgress").textContent = `${idx + 1} / ${total}`;
+  $("#examProgress").textContent = `${idx + 1}/${total}`;
 
   renderLiveScore();
 
   $("#questionPanel").innerHTML = `
-    <header class="doc-header">
+    <header class="doc-header doc-header--exam" aria-hidden="true">
       <div class="doc-header__top">AESF — EXAMEN TIPO TEST</div>
       <div class="doc-header__title">${cab}</div>
       <div class="doc-header__meta">Reglamento de Circulación Ferroviaria (RCF)</div>
@@ -319,7 +319,7 @@ function renderExam() {
     <div class="doc-body">
       ${formatQuestionBlock(q, { selected, showCorrection, answered: !!selected, examIndex: idx })}
     </div>
-    <footer class="doc-footer">Pregunta ${idx + 1} de ${total}</footer>
+    <footer class="doc-footer doc-footer--exam" aria-hidden="true">Pregunta ${idx + 1} de ${total}</footer>
   `;
 
   $("#questionPanel").querySelectorAll('input[name="resp"]').forEach((input) => {
@@ -335,6 +335,10 @@ function renderExam() {
   }
 
   renderQuestionMap();
+
+  if (window.matchMedia("(max-width: 768px)").matches) {
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
 }
 
 function selectAnswer(letter) {
