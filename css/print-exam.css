@@ -1,0 +1,232 @@
+@page {
+  size: A4 portrait;
+  margin: 12mm 14mm 16mm;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.35;
+  color: #000;
+}
+
+.print-page {
+  position: relative;
+  min-height: 255mm;
+  page-break-after: always;
+  display: flex;
+  flex-direction: column;
+}
+
+.print-page:last-child {
+  page-break-after: auto;
+}
+
+.print-page--blank {
+  min-height: 277mm;
+}
+
+/* Cabecera CEFF */
+.ceff-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 14mm;
+  margin-bottom: 4mm;
+  flex-shrink: 0;
+}
+
+.ceff-head__logo {
+  height: 14mm;
+  width: auto;
+  max-width: 90mm;
+  object-fit: contain;
+}
+
+.ceff-head__control {
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 11pt;
+  letter-spacing: 0.02em;
+  margin-top: 1mm;
+}
+
+/* Pie CEFF */
+.ceff-foot {
+  margin-top: auto;
+  padding-top: 6mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 10pt;
+  flex-shrink: 0;
+}
+
+.ceff-foot--cover {
+  justify-content: space-between;
+}
+
+.ceff-foot__num {
+  min-width: 12mm;
+}
+
+.ceff-foot__date {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Portada */
+.ceff-cover-body {
+  flex: 1;
+  padding-top: 6mm;
+}
+
+.ceff-cover-title {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 20.5pt;
+  text-align: center;
+  margin: 8mm 0 10mm;
+  line-height: 1.25;
+}
+
+.ceff-score-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8mm;
+  max-width: 150mm;
+  margin: 0 auto 8mm;
+  font-weight: bold;
+  font-size: 12pt;
+}
+
+.ceff-score-row span {
+  border-bottom: 1px solid #000;
+  padding-bottom: 2mm;
+  min-height: 8mm;
+}
+
+.ceff-score-row .ceff-score-row__cal {
+  font-size: 14pt;
+  text-align: center;
+}
+
+.ceff-nombre-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10mm;
+  margin-bottom: 10mm;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.ceff-nombre-row span {
+  border-bottom: 1px solid #000;
+  padding-bottom: 2mm;
+  min-height: 8mm;
+}
+
+.ceff-instrucciones {
+  font-size: 12pt;
+  text-align: justify;
+  line-height: 1.45;
+}
+
+.ceff-instrucciones p {
+  margin: 0 0 3.5mm;
+}
+
+.ceff-instrucciones ul {
+  margin: 0 0 3.5mm;
+  padding-left: 6mm;
+}
+
+/* Página de preguntas */
+.ceff-body {
+  flex: 1;
+  padding-top: 2mm;
+}
+
+.ceff-bloque-title {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 20pt;
+  text-align: center;
+  margin: 0 0 8mm;
+}
+
+.ceff-pregunta {
+  margin-bottom: 5mm;
+  page-break-inside: avoid;
+}
+
+.ceff-pregunta__enunciado {
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: justify;
+  margin: 0 0 2mm;
+  padding-left: 0;
+}
+
+.ceff-pregunta__figuras {
+  text-align: center;
+  margin: 2mm 0 3mm;
+  padding-left: 9mm;
+}
+
+.ceff-pregunta__figuras img {
+  max-width: 100%;
+  max-height: 55mm;
+  height: auto;
+}
+
+.ceff-opcion {
+  font-size: 12pt;
+  font-weight: normal;
+  margin: 0 0 1.5mm;
+  padding-left: 9mm;
+  text-align: justify;
+}
+
+/* Plantilla AESF — reglas en print-aesf-plantilla.css */
+
+.clave-docente {
+  padding: 10mm;
+  font-family: Arial, sans-serif;
+}
+
+.clave-docente__aviso {
+  text-align: center;
+  color: #c00000;
+  font-weight: bold;
+  font-size: 12pt;
+  margin: 0 0 4mm;
+}
+
+.clave-docente__titulo {
+  text-align: center;
+  font-size: 11pt;
+  margin: 0 0 8mm;
+}
+
+.clave-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2mm 4mm;
+  font-size: 10pt;
+}
+
+.clave-item strong {
+  display: inline-block;
+  min-width: 1.5rem;
+}
+
+@media print {
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ceff-page { min-height: auto; }
+}
