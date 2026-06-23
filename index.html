@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Exámenes RCF — Maquinista</title>
+  <script>
+    (function () {
+      var p = location.pathname;
+      var last = p.split("/").pop() || "";
+      if (!p.endsWith("/") && !/\.[a-z0-9]+$/i.test(last)) {
+        location.replace(p + "/" + location.search + location.hash);
+        return;
+      }
+      var base = p.endsWith("/") ? p : p.slice(0, p.lastIndexOf("/") + 1);
+      window.APP_BASE = base;
+      var el = document.createElement("base");
+      el.href = base;
+      document.head.appendChild(el);
+    })();
+  </script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -185,6 +200,7 @@
     <div id="reviewPanel"></div>
   </div>
 
+  <script src="js/assets.js"></script>
   <script src="js/questions-data.js"></script>
   <script src="js/ui-busy.js"></script>
   <script src="js/exam-archive.js"></script>

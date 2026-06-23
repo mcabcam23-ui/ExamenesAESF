@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# No ignorar assets necesarios para la web:
+# js/questions-data.js, images/, css/, index.html
