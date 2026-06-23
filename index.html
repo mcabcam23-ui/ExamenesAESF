@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exámenes RCF — Maquinista</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="appBusy" class="app-busy" hidden aria-live="polite" aria-busy="true">
+    <div class="app-busy__box">
+      <div class="app-busy__spinner" aria-hidden="true"></div>
+      <p id="appBusyMsg">Procesando…</p>
+    </div>
+  </div>
+
+  <div id="viewConfig" class="view">
+    <div class="hoja hoja--config">
+      <header class="doc-header">
+        <div class="doc-header__top">AESF — MAQUINISTA</div>
+        <div class="doc-header__title">Exámenes RCF</div>
+        <div class="doc-header__meta">Reglamento de Circulación Ferroviaria</div>
+      </header>
+
+      <p><strong>Configuración del examen</strong></p>
+
+      <table class="form-table">
+        <tr>
+          <td>Modo:</td>
+          <td>
+            <label><input type="radio" name="mode" value="practice" checked> Practicar (corrección al responder)</label><br>
+            <label><input type="radio" name="mode" value="exam"> Examen (corrección al final)</label>
+          </td>
+        </tr>
+        <tr>
+          <td>Nº preguntas:</td>
+          <td>
+            <input type="number" id="numQuestionsInput" min="5" max="100" value="60" class="input-corto"> (máx. errores: <span id="passHint">12</span> en 60 preg.)
+          </td>
+        </tr>
+        <tr>
+          <td>Libros:</td>
+          <td id="bookGrid"></td>
+        </tr>
+        <tr>
+          <td>Opciones:</td>
+          <td>
+            <label><input type="checkbox" id="proportionalBooks"> Repartir entre libros seleccionados</label>
+          </td>
+        </tr>
+      </table>
+
+      <p class="nota" id="poolInfo"></p>
+
+      <p>
+        <button type="button" id="presetOfficial" class="btn">Examen oficial (60 preg., 5 libros)</button>
+        <button type="button" id="exportPdfBtn" class="btn">Generar PDF para imprimir</button>
+        <button type="button" id="startBtn" class="btn btn--principal">Comenzar examen</button>
+      </p>
+      <p class="nota">PDF con preguntas RCF + hoja RESPUESTAS (solo rejilla AESF). Al generarlo queda guardado para escanear después.</p>
+
+      <details class="repaso-panel" id="archivedPanel">
+        <summary>Exámenes impresos (<span id="archivedCount">0</span>)</summary>
+        <div class="repaso-panel__body">
+          <p class="nota">Al generar un PDF el examen se guarda aquí. Puedes ver las preguntas, reimprimir o escanear la hoja de respuestas marcada.</p>
+          <p id="archivedSavedMsg" class="archived-saved-msg" hidden></p>
+          <p id="archivedEmpty" class="nota">Aún no has generado ningún PDF.</p>
+          <ul id="archivedList" class="archived-list"></ul>
+        </div>
+      </details>
+
+      <details class="repaso-panel" id="failedPanel">
+        <summary>Repaso de preguntas falladas (<span id="failedCount">0</span>)</summary>
+        <div class="repaso-panel__body">
+          <p class="nota">Preguntas que has fallado en exámenes anteriores. Se guardan automáticamente.</p>
+          <p id="failedEmpty" class="nota" hidden>No tienes preguntas falladas guardadas.</p>
+          <ul id="failedList" class="failed-list"></ul>
+          <p>
+            <button type="button" id="startFailedBtn" class="btn btn--principal" disabled>Examen solo con falladas</button>
+            <button type="button" id="clearFailedBtn" class="btn">Vaciar historial</button>
+          </p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div id="viewExam" class="view" hidden>
+    <div class="exam-layout">
+      <div class="barra barra--top">
+        <button type="button" id="exitExamBtn" class="btn btn--link">[ Salir ]</button>
+        <button type="button" id="exportPdfExamBtn" class="btn btn--sm">PDF / Imprimir</button>
+        <span id="examInfo" class="barra__titulo"></span>
+        <div id="liveScore" class="marcador-live" hidden></div>
+      </div>
+
+      <details class="mapa-desplegable" id="questionMapPanel">
+        <summary>Ver todas las preguntas (<span id="mapSummary">0/0</span>)</summary>
+        <div class="mapa-leyenda">
+          <span class="mapa-leyenda__item"><i class="mapa-dot mapa-dot--empty"></i> Sin hacer</span>
+          <span class="mapa-leyenda__item"><i class="mapa-dot mapa-dot--answered"></i> Respondida</span>
+          <span class="mapa-leyenda__item"><i class="mapa-dot mapa-dot--ok"></i> Acertada</span>
+          <span class="mapa-leyenda__item"><i class="mapa-dot mapa-dot--fail"></i> Fallada</span>
+        </div>
+        <div id="questionMap" class="pregunta-mapa"></div>
+      </details>
+
+      <div class="hoja" id="questionPanel"></div>
+    </div>
+
+    <nav class="exam-nav-fixed" aria-label="Navegación del examen">
+      <div class="exam-nav-fixed__inner">
+        <button type="button" id="prevBtn" class="btn" disabled>← Anterior</button>
+        <span id="examProgress" class="exam-nav-fixed__progress"></span>
+        <button type="button" id="nextBtn" class="btn">Siguiente →</button>
+        <button type="button" id="finishBtn" class="btn btn--principal">Finalizar examen</button>
+      </div>
+    </nav>
+  </div>
+
+  <div id="viewArchive" class="view" hidden>
+    <div class="hoja">
+      <header class="doc-header">
+        <div class="doc-header__top">AESF — MAQUINISTA</div>
+        <div class="doc-header__title" id="archiveViewTitle">Examen archivado</div>
+      </header>
+      <p class="centro">
+        <button type="button" id="archiveBackBtn" class="btn btn--principal">← Volver</button>
+      </p>
+    </div>
+    <div id="archiveQuestionPanel" class="archive-questions"></div>
+  </div>
+
+  <div id="viewScan" class="view" hidden>
+    <div class="hoja hoja--scan">
+      <header class="doc-header">
+        <div class="doc-header__top">CORRECCIÓN POR ESCANEO</div>
+        <div class="doc-header__title" id="scanTitle">Escanear hoja de respuestas</div>
+      </header>
+
+      <div id="scanStepCapture">
+        <p class="nota">Fotografía o sube la <strong>hoja RESPUESTAS</strong> (la última página del PDF, solo la rejilla de burbujas). Asegúrate de que se vea completa y sin sombras fuertes.</p>
+        <p class="scan-actions">
+          <button type="button" id="scanCameraBtn" class="btn btn--principal">📷 Usar cámara</button>
+          <button type="button" id="scanUploadBtn" class="btn">Subir imagen</button>
+          <input type="file" id="scanFileInput" accept="image/*" hidden>
+        </p>
+        <div id="scanPreview" class="scan-preview"></div>
+        <p id="scanStatus" class="scan-status nota"></p>
+      </div>
+
+      <div id="scanStepReview" hidden>
+        <p id="scanDoubtHint" class="scan-doubt-hint"></p>
+        <div id="scanDoubtList"></div>
+      </div>
+
+      <div id="scanStepResults" hidden>
+        <div id="scanResultsHero"></div>
+        <div id="scanResultsDetail" class="scan-results-detail"></div>
+        <p class="centro scan-actions">
+          <button type="button" id="scanRescanBtn" class="btn">Escanear de nuevo</button>
+          <button type="button" id="scanDoneBtn" class="btn btn--principal">Listo</button>
+        </p>
+      </div>
+
+      <p class="centro">
+        <button type="button" id="scanBackBtn" class="btn btn--link">← Cancelar</button>
+      </p>
+    </div>
+  </div>
+
+  <div id="viewResults" class="view" hidden>
+    <div class="hoja">
+      <header class="doc-header">
+        <div class="doc-header__top">AESF — MAQUINISTA</div>
+        <div class="doc-header__title">Resultado del examen</div>
+      </header>
+      <div id="resultsHero"></div>
+      <p class="centro">
+        <button type="button" id="reviewWrongBtn" class="btn">Ver fallos</button>
+        <button type="button" id="reviewAllBtn" class="btn">Ver todas</button>
+        <button type="button" id="retryFailedBtn" class="btn">Repasar falladas</button>
+        <button type="button" id="newSessionBtn" class="btn btn--principal">Nuevo examen</button>
+      </p>
+    </div>
+    <div id="reviewPanel"></div>
+  </div>
+
+  <script src="js/questions-data.js"></script>
+  <script src="js/ui-busy.js"></script>
+  <script src="js/exam-archive.js"></script>
+  <script src="js/omr-scanner.js"></script>
+  <script src="js/pdf-export.js"></script>
+  <script src="js/exam-scan.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
