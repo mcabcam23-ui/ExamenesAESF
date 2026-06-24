@@ -37,6 +37,16 @@
         <div class="doc-header__meta">Reglamento de Circulación Ferroviaria</div>
       </header>
 
+      <div class="google-sync" id="googleSyncPanel">
+        <p id="googleSyncStatus" class="google-sync__status">Datos guardados en este dispositivo</p>
+        <div class="google-sync__actions">
+          <button type="button" id="googleSignInBtn" class="btn btn--sm btn--google">Iniciar sesión con Google</button>
+          <button type="button" id="googleSyncNowBtn" class="btn btn--sm" hidden>Sincronizar ahora</button>
+          <button type="button" id="googleSignOutBtn" class="btn btn--sm" hidden>Cerrar sesión</button>
+        </div>
+        <p class="nota google-sync__hint">Repaso, exámenes impresos y progreso se copian a tu cuenta Google (requiere configurar Firebase una vez).</p>
+      </div>
+
       <p><strong>Configuración del examen</strong></p>
 
       <table class="form-table">
@@ -58,6 +68,13 @@
           <td id="bookGrid"></td>
         </tr>
         <tr>
+          <td>Orden:</td>
+          <td>
+            <label><input type="radio" name="questionOrder" value="random" checked> Aleatorio</label><br>
+            <label><input type="radio" name="questionOrder" value="ordered"> Orden del libro (1, 2, 3…)</label>
+          </td>
+        </tr>
+        <tr>
           <td>Opciones:</td>
           <td>
             <label><input type="checkbox" id="proportionalBooks"> Repartir entre libros seleccionados</label>
@@ -69,6 +86,7 @@
 
       <p class="config-actions">
         <button type="button" id="presetOfficial" class="btn">Examen oficial (60 preg., 5 libros)</button>
+        <button type="button" id="presetBookOrder" class="btn">Libro completo en orden</button>
         <button type="button" id="exportPdfBtn" class="btn">Generar PDF para imprimir</button>
         <button type="button" id="startBtn" class="btn btn--principal">Comenzar examen</button>
       </p>
@@ -206,6 +224,8 @@
   <script src="js/exam-archive.js"></script>
   <script src="js/omr-scanner.js"></script>
   <script src="js/pdf-export.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/cloud-sync.js"></script>
   <script src="js/exam-scan.js"></script>
   <script src="js/app.js"></script>
 </body>

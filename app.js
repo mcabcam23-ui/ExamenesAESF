@@ -38,10 +38,27 @@ function getPool(books) {
   return DATA.questions.filter((q) => books.includes(q.book));
 }
 
+function getOptionLetters(q) {
+  return Object.keys(q.options || {}).sort();
+}
+
+function sortByBookOrder(questions) {
+  return [...questions].sort((a, b) => {
+    if (a.book !== b.book) return a.book - b.book;
+    const na = typeof a.number === "number" ? a.number : parseInt(String(a.number), 10) || 99999;
+    const nb = typeof b.number === "number" ? b.number : parseInt(String(b.number), 10) || 99999;
+    return na - nb;
+  });
+}
+
 function pickQuestions(config) {
   const pool = getPool(config.books);
   if (!pool.length) return [];
   const count = Math.min(config.numQuestions, pool.length);
+
+  if (config.ordered) {
+    return sortByBookOrder(pool).slice(0, count);
+  }
 
   if (config.proportional && config.books.length > 1) {
     const byBook = {};
@@ -93,7 +110,7 @@ function formatQuestionBlock(q, opts = {}) {
   const { answered, showCorrection, selected, examIndex } = opts;
   const label = examIndex != null ? getExamNumberLabel(examIndex) : (q.numberLabel ?? q.number);
   const suf = q.optionSuffix ?? ")";
-  const letters = ["a", "b", "c", "d"].filter((l) => q.options[l]);
+  const letters = getOptionLetters(q).filter((l) => q.options[l]);
 
   let html = `<p class="pregunta-num"><span class="pregunta-num__n">${esc(label)}.-</span> ${esc(q.text)}</p>`;
 
@@ -198,10 +215,20 @@ function updatePoolInfo() {
   const pool = getPool(books);
   const num = Number($("#numQuestionsInput").value) || 60;
   const maxErr = calcMaxErrors(num);
+  const ordered = document.querySelector('input[name="questionOrder"]:checked')?.value === "ordered";
   $("#passHint").textContent = maxErr;
-  $("#poolInfo").textContent = pool.length
-    ? `${pool.length} preguntas disponibles. Cada examen elige ${num} al azar. Para aprobar: mínimo ${num - maxErr} aciertos de ${num} (${Math.round((OFFICIAL?.passRate ?? 0.8) * 100)}%).`
+  let msg = pool.length
+    ? `${pool.length} preguntas disponibles.`
     : "Selecciona al menos un libro.";
+  if (pool.length) {
+    if (ordered) {
+      msg += ` Modo orden del libro (sin mezclar). Se tomarán hasta ${num} en secuencia 1, 2, 3…`;
+    } else {
+      msg += ` Cada examen elige ${num} al azar.`;
+    }
+    msg += ` Para aprobar: mínimo ${num - maxErr} aciertos de ${num} (${Math.round((OFFICIAL?.passRate ?? 0.8) * 100)}%).`;
+  }
+  $("#poolInfo").textContent = msg;
 }
 
 function readConfig() {
@@ -210,6 +237,7 @@ function readConfig() {
     numQuestions: Number($("#numQuestionsInput").value) || 60,
     books: getSelectedBooks(),
     proportional: $("#proportionalBooks").checked,
+    ordered: document.querySelector('input[name="questionOrder"]:checked')?.value === "ordered",
   };
 }
 
@@ -337,7 +365,7 @@ function renderExam() {
   renderQuestionMap();
 
   if (window.matchMedia("(max-width: 768px)").matches) {
-    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    window.scrollTo(0, 0);
   }
 }
 
@@ -394,6 +422,7 @@ function addToFailedStore(q) {
   };
   localStorage.setItem(FAILED_KEY, JSON.stringify(store));
   scheduleRenderFailedSection();
+  if (typeof notifyCloudDataChanged === "function") notifyCloudDataChanged();
 }
 
 let _failedSectionTimer;
@@ -418,12 +447,14 @@ function removeFromFailed(id, silent) {
   delete store[id];
   localStorage.setItem(FAILED_KEY, JSON.stringify(store));
   renderFailedSection();
+  if (typeof notifyCloudDataChanged === "function") notifyCloudDataChanged();
 }
 
 function clearFailedStore() {
   if (!confirm("¿Vaciar todo el historial de preguntas falladas?")) return;
   localStorage.removeItem(FAILED_KEY);
   renderFailedSection();
+  if (typeof notifyCloudDataChanged === "function") notifyCloudDataChanged();
 }
 
 function getFailedQuestionsForExam() {
@@ -537,9 +568,13 @@ function init() {
   updatePoolInfo();
   renderFailedSection();
   if (typeof initExamScan === "function") initExamScan();
+  if (typeof initCloudSyncUI === "function") initCloudSyncUI();
 
   $("#numQuestionsInput").addEventListener("input", updatePoolInfo);
   $("#bookGrid").addEventListener("change", updatePoolInfo);
+  document.querySelectorAll('input[name="questionOrder"]').forEach((el) => {
+    el.addEventListener("change", updatePoolInfo);
+  });
 
   $("#questionMap")?.addEventListener("click", (ev) => {
     const btn = ev.target.closest(".mapa-btn");
@@ -551,9 +586,24 @@ function init() {
 
   $("#presetOfficial").addEventListener("click", () => {
     document.querySelector('input[name="mode"][value="exam"]').checked = true;
+    document.querySelector('input[name="questionOrder"][value="random"]').checked = true;
     $("#numQuestionsInput").value = 60;
     document.querySelectorAll('input[name="book"]').forEach((el) => { el.checked = true; });
     $("#proportionalBooks").checked = true;
+    updatePoolInfo();
+  });
+
+  $("#presetBookOrder").addEventListener("click", () => {
+    const books = getSelectedBooks();
+    if (books.length !== 1) {
+      alert("Selecciona un solo libro para estudiar en orden.");
+      return;
+    }
+    document.querySelector('input[name="mode"][value="practice"]').checked = true;
+    document.querySelector('input[name="questionOrder"][value="ordered"]').checked = true;
+    $("#proportionalBooks").checked = false;
+    const count = DATA.meta.books[String(books[0])]?.count ?? 60;
+    $("#numQuestionsInput").value = count;
     updatePoolInfo();
   });
 

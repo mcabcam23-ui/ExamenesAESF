@@ -41,7 +41,7 @@ function calcMaxErrors(n) {
 function formatQuestionForPrint(q, index) {
   const num = index + 1;
   const suf = q.optionSuffix ?? ")";
-  const letters = ["a", "b", "c", "d"].filter((l) => q.options[l]);
+  const letters = Object.keys(q.options || {}).sort().filter((l) => q.options[l]);
 
   let html = `<div class="ceff-pregunta">`;
   html += `<p class="ceff-pregunta__enunciado">${num}.- ${escPrint(q.text)}</p>`;
@@ -246,6 +246,7 @@ function buildExamPrintDocument(questions, config, archivedEntry) {
   );
   const blankPage = `<div class="print-page print-page--blank" aria-label="Página en blanco"></div>`;
   const plantillaAesf = buildAesfPlantillaExacta(total, cab, examId);
+  const clave = buildClaveDocente(questions, cab, dateStr);
 
   return `<!DOCTYPE html>
 <html lang="es">
@@ -260,6 +261,7 @@ function buildExamPrintDocument(questions, config, archivedEntry) {
   ${questionPages}
   ${blankPage}
   ${plantillaAesf}
+  ${clave}
 </body>
 </html>`;
 }

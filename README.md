@@ -33,10 +33,12 @@ Si faltan estilos o preguntas, comprueba en el navegador (F12 → Network) que n
 |-------|-----------|
 | 1 — Disposiciones generales | 254 |
 | 2 — Señales ferroviarias | 246 |
-| 3 — Circulación y maniobras | 224 |
-| 4 — Bloqueos | 175 |
+| 3 — Circulación y maniobras | 223 |
+| 4 — Bloqueos | 174 |
 | 5 — Maquinista y sistemas | 97 |
-| **Total** | **995** |
+| **Total** | **993** |
+
+Las preguntas marcadas como **NADA** en el PDF oficial (anuladas) no se incluyen.
 
 Todas las respuestas coinciden con las plantillas del PDF.
 

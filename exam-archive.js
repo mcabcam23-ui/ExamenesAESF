@@ -25,6 +25,7 @@ function archiveExam(questions, cab, config) {
   store.unshift(entry);
   if (store.length > 40) store.length = 40;
   localStorage.setItem(ARCHIVE_KEY, JSON.stringify(store));
+  if (typeof notifyCloudDataChanged === "function") notifyCloudDataChanged();
   return entry;
 }
 
@@ -43,6 +44,7 @@ function getArchivedExam(id) {
 function deleteArchivedExam(id) {
   const store = getArchivedExams().filter((e) => e.id !== id);
   localStorage.setItem(ARCHIVE_KEY, JSON.stringify(store));
+  if (typeof notifyCloudDataChanged === "function") notifyCloudDataChanged();
 }
 
 function resolveArchivedQuestions(entry) {

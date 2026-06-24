@@ -883,6 +883,43 @@ body.body--exam {
   padding: 2rem;
 }
 
+/* Google sync */
+.google-sync {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem;
+  border: 1px solid #c5cdd8;
+  background: #f8fafc;
+}
+
+.google-sync__status {
+  margin: 0 0 0.5rem;
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+.google-sync__status[data-tone="ok"] { color: #2e7d32; }
+.google-sync__status[data-tone="warn"] { color: #e65100; }
+.google-sync__status[data-tone="err"] { color: #c62828; }
+.google-sync__status[data-tone="busy"] { color: #1b3a6b; }
+
+.google-sync__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.google-sync__hint {
+  margin: 0;
+  font-size: 9pt;
+}
+
+.btn--google {
+  background: #fff;
+  border-color: #4285f4;
+  color: #1a73e8;
+}
+
 /* Botones de configuración */
 .config-actions {
   display: flex;
